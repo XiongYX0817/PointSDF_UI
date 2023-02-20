@@ -3,4 +3,4 @@ GPUtil
 trimesh
 tensorboardX
 open3d
-Pillow==7.1.2
+Pillow==8.4.0
