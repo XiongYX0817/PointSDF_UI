@@ -1,4 +1,4 @@
-pyhocon
+pyhocon==0.3.16
 GPUtil
 trimesh
 tensorboardX
