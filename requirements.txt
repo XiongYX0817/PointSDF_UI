@@ -2,3 +2,4 @@ pyhocon
 GPUtil
 trimesh
 tensorboardX
+open3d
