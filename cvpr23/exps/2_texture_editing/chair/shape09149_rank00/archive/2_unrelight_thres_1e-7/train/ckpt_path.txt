@@ -1,0 +1,1 @@
+/data1/sr/code/PhySG/cvpr23/exps/2_texture_editing/chair/shape09149_rank00/0_unrelight_finetune/model_params/latest_model.pth
