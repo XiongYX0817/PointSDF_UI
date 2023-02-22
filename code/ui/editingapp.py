@@ -39,7 +39,6 @@ class PhySGEditingApp(labwidget.Widget):
         torch.set_default_tensor_type('torch.cuda.FloatTensor' if device == 'cuda:0' else 'cpu')
         self.edit_type = edit_type
         self.instance = instance
-        self.num_canvases = num_canvases
         self.shape_params = shape_params
         self.color_params = color_params
         self.size = IMG_SIZE
@@ -86,19 +85,24 @@ class PhySGEditingApp(labwidget.Widget):
         self.target_edit_idx = None
 
         self.conf = ConfigFactory.parse_file("../confs_sg/dual_mlp_cdist.conf")
-        self.shape = "shape09149_rank00"
-        self.data_split_dir = "../../cvpr23/data/color_editing/chair/" + self.shape + "/train/"
-        self.expname = "chair/" + self.shape
-        self.timestamp = "2022_11_06_00_28_29"
+        # self.shape = "shape09149_rank00"
+        # self.data_split_dir = "../../cvpr23/data/color_editing/chair/" + self.shape + "/train/"
+        # self.expname = "chair/" + self.shape
+        # self.timestamp = "2022_11_06_00_28_29"
+        self.shape = "kitty1"
+        self.data_split_dir = "../../cvpr23/data/color_editing/kitty/" + self.shape + "/train/"
+        self.expname = "kitty/" + self.shape
+        self.timestamp = "ModelParameters"
         self.exps_folder = "cvpr23/exps"
         self.gamma = 1.0
         self.resolution = 256
         self.threshold = 1e-2
         self.task = "2_texture_editing"
         self.flag = "2_unrelight_thres_1e-7"
-        self.display_ids = [30, 46, 74, 12, 97, 85, 24, 56, 62]
-        self.display_ids_sorted = sorted(self.display_ids)
-        self.ckpt_path = "../../cvpr23/exps/0_unedited_models/chair/" + self.shape + "/" + self.timestamp + "/checkpoints/latest.pth"
+        # self.display_ids = sorted([30, 46, 74, 12, 97, 85, 24, 56, 62][:num_canvases])
+        # self.ckpt_path = "../../cvpr23/exps/0_unedited_models/chair/" + self.shape + "/" + self.timestamp + "/checkpoints/latest.pth"
+        self.display_ids = sorted([11, 24, 49, 0, 9, 6, 52, 65, 74][:num_canvases])
+        self.ckpt_path = "../../cvpr23/exps/0_unedited_models/kitty/" + self.shape + "/" + self.timestamp + "/checkpoints/latest.pth"
         self.edited_3d_points = None
 
         self.n_epochs = 1000
@@ -190,7 +194,8 @@ class PhySGEditingApp(labwidget.Widget):
             image = renormalize.from_url(evt.target.src) / 2 + 0.5
             image = image * 255
             self.color = [int(x) * 2 / 255. - 1 for x in image[:, 0, 0]]
-            color = torch.zeros((3, self.size * 2, self.size * 2)).cpu()
+            # color = torch.zeros((3, self.size * 2, self.size * 2)).cpu()
+            color = torch.zeros((3, self.size * 4, self.size * 4)).cpu()
             color[0, :, :] = self.color[0]
             color[1, :, :] = self.color[1]
             color[2, :, :] = self.color[2]
@@ -222,7 +227,8 @@ class PhySGEditingApp(labwidget.Widget):
              resolution=self.resolution,
              save_exr=False,
              light_sg='',
-             view_name=[self.shape + "_" + str(idx) for idx in self.display_ids_sorted[:self.num_canvases]],
+             # view_name=[self.shape + "_" + str(idx) for idx in self.display_ids],
+             view_name=["rgb_" + str(idx).zfill(6) for idx in self.display_ids],
              diffuse_rgb='',
              threshold=self.threshold,
              flag=self.flag,
@@ -242,7 +248,8 @@ class PhySGEditingApp(labwidget.Widget):
                 return
             orig_img = renormalize.from_url(self.editing_canvas.image)
             mask = renormalize.from_url(self.editing_canvas.mask) / 2 + 0.5
-            mask = F.interpolate(mask.unsqueeze(dim=0), size=(self.size * 2, self.size * 2)).squeeze()
+            # mask = F.interpolate(mask.unsqueeze(dim=0), size=(self.size * 2, self.size * 2)).squeeze()
+            mask = F.interpolate(mask.unsqueeze(dim=0), size=(self.size * 4, self.size * 4)).squeeze()
             if self.mask_type == 'positive':
                 self.edit_type = 'color'
                 if self.color is None:
@@ -283,9 +290,9 @@ class PhySGEditingApp(labwidget.Widget):
             self.msg_out.print("To be implemented...", replace=True)
             return
         rgbs = self.render()
-        # from PIL import Image
-        # for i, rgb in enumerate(rgbs):
-        #     Image.fromarray((rgb * 255).astype(np.uint8)).save("../" + str(i) + ".png")
+        from PIL import Image
+        for i, rgb in enumerate(rgbs):
+            Image.fromarray((rgb * 255).astype(np.uint8)).save("../" + str(i) + ".png")
         rgbs = [torch.from_numpy(rgb).permute(2, 0, 1) for rgb in rgbs]
         self.update_canvas(rgbs)
         self.msg_out.print("Update Done!", replace=True)
@@ -300,7 +307,8 @@ class PhySGEditingApp(labwidget.Widget):
              timestamp=self.timestamp,
              resolution=self.resolution,
              light_sg='',
-             view_name=[self.shape + "_" + str(self.display_ids_sorted[self.target_edit_idx])],
+             # view_name=[self.shape + "_" + str(self.display_ids[self.target_edit_idx])],
+             view_name=["rgb_" + str(self.display_ids[self.target_edit_idx]).zfill(6)],
              edited_image=self.edited_image,
              mask_image=self.mask,
              n_epochs=self.n_epochs,
