@@ -10,7 +10,8 @@ import imageio
 from torch.nn import functional as F
 from torchvision import utils, transforms
 from PIL import Image
-from pyhocon import ConfigFactory
+import json
+# from pyhocon import ConfigFactory, HOCONConverter
 
 from ui_utils import renormalize, show, labwidget, paintwidget, mean_colors
 from rendering import render_path
@@ -85,9 +86,8 @@ class PhySGEditingApp(labwidget.Widget):
         self.target_edit_idx = None
 
         # self.conf = ConfigFactory.parse_file("../confs_sg/dual_mlp_cdist.conf")
-        with open("../confs_sg/dual_mlp_cdist.conf", "r", encoding="utf-8") as f:
-            conf = f.read()
-        self.conf = ConfigFactory.parse_string(conf)
+        with open("../confs_sg/dual_mlp_cdist.json", "r") as f:
+            self.conf = json.load(f)
         
         # self.shape = "shape09149_rank00"
         # self.data_split_dir = "../../cvpr23/data/color_editing/chair/" + self.shape + "/train/"
@@ -113,7 +113,7 @@ class PhySGEditingApp(labwidget.Widget):
         self.lr = 1e-3
         self.mask = None
 
-        self.model = utils_general.get_class(self.conf.get_string('train.model_class'))(conf=self.conf.get_config('model'))
+        self.model = utils_general.get_class(self.conf['train']['model_class'])(conf=self.conf['model'])
         model_dict = self.model.state_dict()
         if torch.cuda.is_available():
             self.model.cuda()

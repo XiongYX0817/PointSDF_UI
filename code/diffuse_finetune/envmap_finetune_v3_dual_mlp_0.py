@@ -370,7 +370,7 @@ def finetune_for_display(**kwargs):
 
     #######################################################################################################
     ## load dataset
-    eval_dataset = utils.get_class(conf.get_string('train.dataset_class'))(kwargs['gamma'],
+    eval_dataset = utils.get_class(conf['train']['dataset_class'])(kwargs['gamma'],
                                                                            kwargs['data_split_dir'],
                                                                            train_cameras=False)
 
