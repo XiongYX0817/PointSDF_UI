@@ -12,6 +12,7 @@ from torchvision import utils, transforms
 from PIL import Image
 import json
 from pyhocon import ConfigFactory, HOCONConverter
+from conf_utils import dict_to_configtree
 
 from ui_utils import renormalize, show, labwidget, paintwidget, mean_colors
 from rendering import render_path
@@ -85,9 +86,9 @@ class PhySGEditingApp(labwidget.Widget):
 
         self.target_edit_idx = None
 
-        self.conf = ConfigFactory.parse_file("../confs_sg/dual_mlp_cdist.conf")
-        # with open("../confs_sg/dual_mlp_cdist.json", "r") as f:
-        #     self.conf = json.load(f)
+        # self.conf = ConfigFactory.parse_file("../confs_sg/dual_mlp_cdist.conf")
+        with open("../confs_sg/dual_mlp_cdist.json", "r") as f:
+            self.conf = dict_to_configtree(json.load(f))
         
         # self.shape = "shape09149_rank00"
         # self.data_split_dir = "../../cvpr23/data/color_editing/chair/" + self.shape + "/train/"
