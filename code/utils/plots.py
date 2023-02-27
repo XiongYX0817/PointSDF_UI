@@ -196,6 +196,8 @@ def get_surface_high_res_mesh(sdf, resolution=100):
     s_cov = recon_pc - s_mean
     s_cov = torch.mm(s_cov.transpose(0, 1), s_cov)
     vecs = torch.linalg.eig(s_cov)[1].transpose(0, 1)
+    print(torch.det(vecs))
+    exit()
     if torch.det(vecs) < 0:
         vecs = torch.mm(torch.tensor([[1, 0, 0], [0, 0, 1], [0, 1, 0]]).cuda().float(), vecs)
     helper = torch.bmm(vecs.unsqueeze(0).repeat(recon_pc.shape[0], 1, 1),
