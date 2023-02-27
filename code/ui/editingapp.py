@@ -85,9 +85,9 @@ class PhySGEditingApp(labwidget.Widget):
 
         self.target_edit_idx = None
 
-        # self.conf = ConfigFactory.parse_file("../confs_sg/dual_mlp_cdist.conf")
-        with open("../confs_sg/dual_mlp_cdist.json", "r") as f:
-            self.conf = json.load(f)
+        self.conf = ConfigFactory.parse_file("../confs_sg/dual_mlp_cdist.conf")
+        # with open("../confs_sg/dual_mlp_cdist.json", "r") as f:
+        #     self.conf = json.load(f)
         
         # self.shape = "shape09149_rank00"
         # self.data_split_dir = "../../cvpr23/data/color_editing/chair/" + self.shape + "/train/"

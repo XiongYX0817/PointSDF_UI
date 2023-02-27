@@ -246,7 +246,7 @@ def evaluate_for_display(**kwargs):
     exps_folder_name = kwargs['exps_folder_name']
     evals_folder_name = kwargs['evals_folder_name']
 
-    expname = conf['train']['expname'] + '-' + kwargs['expname']
+    expname = conf.get_string('train.expname') + '-' + kwargs['expname']
 
     task = kwargs["task"]
     flag = kwargs["flag"]
@@ -255,7 +255,7 @@ def evaluate_for_display(**kwargs):
 
     evaldir = os.path.join('../../cvpr23/exps', task, kwargs['expname'], flag, os.path.basename(kwargs['data_split_dir']))
 
-    eval_dataset = utils.get_class(conf['train']['dataset_class'])(kwargs['gamma'],
+    eval_dataset = utils.get_class(conf.get_string('train.dataset_class'))(kwargs['gamma'],
                                                                            kwargs['data_split_dir'],
                                                                            train_cameras=False)
 
