@@ -11,7 +11,7 @@ from torch.nn import functional as F
 from torchvision import utils, transforms
 from PIL import Image
 import json
-# from pyhocon import ConfigFactory, HOCONConverter
+from pyhocon import ConfigFactory, HOCONConverter
 
 from ui_utils import renormalize, show, labwidget, paintwidget, mean_colors
 from rendering import render_path
