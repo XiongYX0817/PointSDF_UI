@@ -9,7 +9,6 @@ def as_image(data, source='zc', target='byte'):
     assert len(data.shape) == 3
     renorm = renormalizer(source=source, target=target)
     return PIL.Image.fromarray(renorm(data).permute(1,2,0).cpu().numpy())
-    # return PIL.Image.fromarray((data * 255).to(dtype=torch.uint8).permute(1,2,0).cpu().numpy())
 
 
 def as_url(data, source='zc', size=None):
