@@ -7,9 +7,10 @@ def as_tensor(data, source='zc', target='zc'):
 
 def as_image(data, source='zc', target='byte'):
     assert len(data.shape) == 3
-    renorm = renormalizer(source=source, target=target)
-    return PIL.Image.fromarray(renorm(data).
-            permute(1,2,0).cpu().numpy())
+    # renorm = renormalizer(source=source, target=target)
+    # return PIL.Image.fromarray(renorm(data).permute(1,2,0).cpu().numpy())
+    return PIL.Image.fromarray((data * 255).to(dtype=torch.uint8).permute(1,2,0).cpu().numpy())
+
 
 def as_url(data, source='zc', size=None):
     if isinstance(data, PIL.Image.Image):
@@ -18,6 +19,7 @@ def as_url(data, source='zc', size=None):
         img = as_image(data, source)
     if size is not None:
         img = img.resize(size, resample=PIL.Image.BILINEAR)
+    img.save("tmp2.png")
     buffered = io.BytesIO()
     img.save(buffered, format='png')
     b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')

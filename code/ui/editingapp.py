@@ -99,7 +99,7 @@ class PhySGEditingApp(labwidget.Widget):
         self.expname = "kitty/" + self.shape
         self.timestamp = "ModelParameters"
         self.exps_folder = "cvpr23/exps"
-        self.gamma = 1.0
+        self.gamma = 2.2
         self.resolution = 256
         self.threshold = 1e-2
         self.task = "2_texture_editing"
