@@ -314,7 +314,7 @@ class PhySGEditingApp(labwidget.Widget):
              light_sg='',
              # view_name=[self.shape + "_" + str(self.display_ids[self.target_edit_idx])],
              view_name=["rgb_" + str(self.display_ids[self.target_edit_idx]).zfill(6)],
-             edited_image=self.edited_image,
+             edited_image=self.edited_image / 2 + 0.5,
              mask_image=self.mask,
              n_epochs=self.n_epochs,
              lr=self.lr,
