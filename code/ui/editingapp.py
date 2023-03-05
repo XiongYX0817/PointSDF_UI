@@ -241,7 +241,7 @@ class PhySGEditingApp(labwidget.Widget):
              model=self.model,
              edited_3d_points = self.edited_3d_points
              )
-        return [output_images[key] for key in output_images]
+        return [output_images[key] * 2 - 1 for key in output_images]
 
     def change_mask(self, ev):
         if self.mask_type == 'positive' or self.mask_type == 'sigma':
@@ -297,7 +297,7 @@ class PhySGEditingApp(labwidget.Widget):
         rgbs = self.render()
         from PIL import Image
         for i, rgb in enumerate(rgbs):
-            Image.fromarray((rgb * 255).astype(np.uint8)).save("../" + str(i) + ".png")
+            Image.fromarray(((rgb+1)/2 * 255).astype(np.uint8)).save("../" + str(i) + ".png")
         rgbs = [torch.from_numpy(rgb).permute(2, 0, 1) for rgb in rgbs]
         self.update_canvas(rgbs)
         self.msg_out.print("Update Done!", replace=True)

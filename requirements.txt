@@ -1,7 +1,7 @@
-pyhocon
-GPUtil
-trimesh
-tensorboardX
-open3d
+pyhocon==0.3.60
+GPUtil==1.4.0
+trimesh==3.20.1
+tensorboardX==2.6
+open3d==0.16.0
 Pillow==7.1.2
 scikit-image==0.16.2
